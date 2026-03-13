@@ -1,0 +1,16 @@
+<Page
+    x:Class="Promix.Financials.UI.Views.DashboardView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Promix.Financials.UI.Controls">
+
+    <Grid Background="{StaticResource AppBackgroundBrush}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="16" Padding="24,20,24,16">
+                <controls:KpiCards/>
+                <controls:QuickActions/>
+                <controls:TransactionsTable/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

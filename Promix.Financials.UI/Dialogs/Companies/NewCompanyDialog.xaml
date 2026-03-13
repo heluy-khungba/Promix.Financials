@@ -1,0 +1,46 @@
+<ContentDialog
+    x:Class="Promix.Financials.UI.Dialogs.Companies.NewCompanyDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="إنشاء شركة جديدة"
+    PrimaryButtonText="إنشاء"
+    CloseButtonText="إلغاء"
+    DefaultButton="Primary"
+    MinWidth="520">
+
+    <Grid RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="أدخل بيانات الشركة. سيتم إنشاء دليل الحسابات تلقائيًا."
+                   Opacity="0.7"/>
+
+        <TextBox Grid.Row="1"
+                 Header="كود الشركة"
+                 IsReadOnly="True"
+                 Text="{Binding GeneratedCode, Mode=OneWay}"/>
+
+        <TextBox Grid.Row="2"
+                 Header="اسم الشركة"
+                 PlaceholderText="مثال: الشركة الرئيسية"
+                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <ComboBox Grid.Row="3"
+                  Header="عملة الأساس"
+                  ItemsSource="{Binding AvailableCurrencies}"
+                  SelectedValuePath="Code"
+                  DisplayMemberPath="DisplayName"
+                  SelectedValue="{Binding SelectedCurrencyCode, Mode=TwoWay}"/>
+
+        <TextBlock Grid.Row="4"
+                   Text="{Binding Error}"
+                   Foreground="Red"
+                   TextWrapping="Wrap"/>
+    </Grid>
+</ContentDialog>

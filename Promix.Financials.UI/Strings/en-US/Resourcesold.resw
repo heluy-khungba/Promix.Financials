@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<data name="Nav_Dashboard.Content" xml:space="preserve"><value>Dashboard</value></data>
+	<data name="Nav_Items.Content" xml:space="preserve"><value>Items</value></data>
+
+	<data name="Items_Title.Text" xml:space="preserve"><value>Items</value></data>
+	<data name="Items_GridTitle" xml:space="preserve"><value>Items</value></data>
+	<data name="NoItems_Title.Text" xml:space="preserve"><value>No items found</value></data>
+
+	<data name="Dashboard_Title.Text" xml:space="preserve"><value>Dashboard</value></data>
+	<data name="Dashboard_Subtitle.Text" xml:space="preserve"><value>Welcome to Promix Financials.</value></data>
+
+	<data name="SearchBox.PlaceholderText" xml:space="preserve"><value>Search by code / name / barcode...</value></data>
+	<data name="ReloadButton.Content" xml:space="preserve"><value>Refresh</value></data>
+
+	<data name="Col_Code.Header" xml:space="preserve"><value>Code</value></data>
+	<data name="Col_Name.Header" xml:space="preserve"><value>Name</value></data>
+	<data name="Col_Type.Header" xml:space="preserve"><value>Type</value></data>
+	<data name="Col_Unit.Header" xml:space="preserve"><value>Unit</value></data>
+	<data name="Col_Barcode.Header" xml:space="preserve"><value>Barcode</value></data>
+	<data name="Col_MinStock.Header" xml:space="preserve"><value>Minimum</value></data>
+	<data name="Col_Inventory.Header" xml:space="preserve"><value>Track inventory</value></data>
+	<data name="Col_Taxable.Header" xml:space="preserve"><value>Taxable</value></data>
+	<data name="Col_Purchase.Header" xml:space="preserve"><value>Purchase price</value></data>
+
+	<data name="ItemCard_Title.Text" xml:space="preserve"><value>Item Card</value></data>
+	<data name="ItemCard_NotFound.Text" xml:space="preserve"><value>Item not found.</value></data>
+	<data name="ItemCard_TitleFormat.Text" xml:space="preserve"><value>{0}</value></data>
+
+	<data name="Tab_General.Header" xml:space="preserve"><value>General</value></data>
+	<data name="Tab_BOM.Header" xml:space="preserve"><value>Components</value></data>
+	<data name="Tab_Prices.Header" xml:space="preserve"><value>Prices</value></data>
+	<data name="Tab_Units.Header" xml:space="preserve"><value>Units</value></data>
+
+	<data name="General_Code.Header" xml:space="preserve"><value>Code</value></data>
+	<data name="General_Name.Header" xml:space="preserve"><value>Name</value></data>
+	<data name="General_Type.Header" xml:space="preserve"><value>Type</value></data>
+	<data name="General_Unit.Header" xml:space="preserve"><value>Unit</value></data>
+	<data name="General_Barcode.Header" xml:space="preserve"><value>Barcode</value></data>
+	<data name="General_Category.Header" xml:space="preserve"><value>Category</value></data>
+	<data name="General_ParentCategory.Header" xml:space="preserve"><value>Parent category</value></data>
+
+	<data name="BOM_Reload.Content" xml:space="preserve"><value>Reload components</value></data>
+	<data name="Prices_Reload.Content" xml:space="preserve"><value>Reload prices</value></data>
+
+	<data name="AddCategory.Content" xml:space="preserve"><value>Add category</value></data>
+	<data name="AddItem.Content" xml:space="preserve"><value>Add item</value></data>
+	<data name="AddCategoryButton.Content" xml:space="preserve"><value>Add category</value></data>
+	<data name="AddItemButton.Content" xml:space="preserve"><value>Add item</value></data>
+
+	<data name="Menu_AddSubCategory.Text" xml:space="preserve"><value>Add subcategory</value></data>
+	<data name="Menu_AddItemUnderCategory.Text" xml:space="preserve"><value>Add item under category</value></data>
+	<data name="Menu_RenameCategory.Text" xml:space="preserve"><value>Rename</value></data>
+	<data name="Menu_DeleteCategory.Text" xml:space="preserve"><value>Delete</value></data>
+
+	<data name="MoveCategory_ChooseParent" xml:space="preserve"><value>Choose a parent category</value></data>
+	<data name="MoveCategory_InfoTemplate" xml:space="preserve"><value>Move to: {0}</value></data>
+	<data name="MoveCategory_ConfirmMove_Title" xml:space="preserve"><value>Confirm move</value></data>
+	<data name="MoveCategory_ConfirmMove_MessageTemplate" xml:space="preserve"><value>Are you sure you want to move this category?</value></data>
+	<data name="MoveCategory_InvalidMove_Title" xml:space="preserve"><value>Invalid move</value></data>
+	<data name="MoveCategory_InvalidMove_Message" xml:space="preserve"><value>This move is not allowed.</value></data>
+
+	<data name="CategoryEdit_CodeRequired" xml:space="preserve"><value>Code is required.</value></data>
+	<data name="CategoryEdit_NameRequired" xml:space="preserve"><value>Name is required.</value></data>
+	<data name="CategoryEdit_SortOrderNonNegative" xml:space="preserve"><value>Sort order must be &gt;= 0.</value></data>
+
+	<data name="Category_SelectFirst" xml:space="preserve"><value>Please select a category first.</value></data>
+	<data name="Category_CannotDelete_HasSubcategories" xml:space="preserve"><value>Cannot delete: this category has subcategories.</value></data>
+	<data name="Category_CannotDelete_HasItems" xml:space="preserve"><value>Cannot delete: this category contains items.</value></data>
+	<data name="Category_ConfirmDelete_Title" xml:space="preserve"><value>Confirm delete</value></data>
+	<data name="Category_ConfirmDelete_MessageTemplate" xml:space="preserve"><value>Are you sure you want to delete this category?</value></data>
+
+	<data name="Domain_Item_CodeRequired" xml:space="preserve"><value>Code is required.</value></data>
+	<data name="Domain_Item_NameRequired" xml:space="preserve"><value>Name is required.</value></data>
+	<data name="Domain_Item_PurchasePriceNegative" xml:space="preserve"><value>Purchase price cannot be negative.</value></data>
+	<data name="Domain_Item_MinimumStockNegative" xml:space="preserve"><value>Minimum stock cannot be negative.</value></data>
+	<data name="Domain_Item_BundleOnly" xml:space="preserve"><value>This item is bundle-only.</value></data>
+	<data name="Domain_Item_InvalidComponent" xml:space="preserve"><value>Invalid component.</value></data>
+	<data name="Domain_Item_InvalidQuantity" xml:space="preserve"><value>Invalid quantity.</value></data>
+	<data name="Domain_Item_ComponentAlreadyExists" xml:space="preserve"><value>Component already exists.</value></data>
+
+	<data name="Item_Save.Content" xml:space="preserve"><value>Save</value></data>
+	<data name="EditItemButton.Content" xml:space="preserve"><value>Edit</value></data>
+
+	<data name="AddComponent.Label" xml:space="preserve"><value>Add component</value></data>
+	<data name="Cmd_AddItem.Label" xml:space="preserve"><value>Add item</value></data>
+	<data name="Cmd_Back.Label" xml:space="preserve"><value>Back</value></data>
+	<data name="Cmd_Save.Label" xml:space="preserve"><value>Save</value></data>
+
+	<data name="Error_Title" xml:space="preserve"><value>Error</value></data>
+	<data name="Error_SaveFailed.Text" xml:space="preserve"><value>Save failed.</value></data>
+	<data name="Error_Generic.Text" xml:space="preserve"><value>Something went wrong.</value></data>
+
+	<data name="Common_OK" xml:space="preserve"><value>OK</value></data>
+	<data name="Common_Yes" xml:space="preserve"><value>Yes</value></data>
+	<data name="Common_No" xml:space="preserve"><value>No</value></data>
+	<data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+	<data name="Common_Delete" xml:space="preserve"><value>Delete</value></data>
+	<data name="Common_ConfirmTitle" xml:space="preserve"><value>Confirm</value></data>
+
+	<data name="Item_Taxable.Content" xml:space="preserve"><value>Taxable</value></data>
+	<data name="Item_TrackInventory.Content" xml:space="preserve"><value>Track inventory</value></data>
+	<data name="Item_PurchasePrice.Header" xml:space="preserve"><value>Purchase price</value></data>
+	<data name="Item_MinStock.Header" xml:space="preserve"><value>Minimum stock</value></data>
+
+	<data name="ItemDialog.Title" xml:space="preserve"><value>Item</value></data>
+	<data name="ItemDialog.PrimaryButtonText" xml:space="preserve"><value>Save</value></data>
+	<data name="ItemDialog.CloseButtonText" xml:space="preserve"><value>Cancel</value></data>
+
+	<data name="ItemSection_General.Text" xml:space="preserve"><value>General</value></data>
+	<data name="ItemSection_Units.Text" xml:space="preserve"><value>Units</value></data>
+	<data name="ItemSection_Prices.Text" xml:space="preserve"><value>Prices</value></data>
+	<data name="ItemSection_BOM.Text" xml:space="preserve"><value>Components</value></data>
+
+	<data name="Settings_Title.Text" xml:space="preserve"><value>Settings</value></data>
+	<data name="Settings_Language.Text" xml:space="preserve"><value>Language</value></data>
+	<data name="Lang_English" xml:space="preserve"><value>English</value></data>
+	<data name="Lang_Arabic" xml:space="preserve"><value>Arabic</value></data>
+
+	<data name="RestartRequired_Title" xml:space="preserve"><value>Restart required</value></data>
+	<data name="RestartRequired_Message" xml:space="preserve"><value>Please restart the app to apply the language change.</value></data>
+	<data name="RestartNow" xml:space="preserve"><value>Restart now</value></data>
+	<data name="RestartLater" xml:space="preserve"><value>Later</value></data>
+
+	<data name="ShowItemsInTree.Header" xml:space="preserve"><value>Show items in tree</value></data>
+	<!-- Header -->
+	<data name="Header_Search.PlaceholderText" xml:space="preserve">
+  <value>Search...</value>
+</data>
+
+	<data name="Header_Settings.ToolTip" xml:space="preserve">
+  <value>Settings</value>
+</data>
+
+	<data name="Header_Date.TodayFormat" xml:space="preserve">
+  <value>dddd, MMMM d, yyyy</value>
+</data>
+
+	<!-- Sidebar -->
+	<data name="Sidebar_Dashboard.Content" xml:space="preserve">
+  <value>Dashboard</value>
+</data>
+
+	<data name="Sidebar_Items.Content" xml:space="preserve">
+  <value>Items</value>
+</data>
+
+	<data name="Sidebar_Reports.Content" xml:space="preserve">
+  <value>Reports</value>
+</data>
+
+	<data name="Sidebar_Settings.Content" xml:space="preserve">
+  <value>Settings</value>
+</data>
+
+	<data name="Sidebar_Logout.Content" xml:space="preserve">
+  <value>Logout</value>
+</data>
+
+	<!-- Quick Actions -->
+	<data name="QuickActions_Title.Text" xml:space="preserve">
+  <value>Quick Actions</value>
+</data>
+
+	<data name="Quick_AddJournal.Content" xml:space="preserve">
+  <value>Journal Entry</value>
+</data>
+
+	<data name="Quick_AddReceipt.Content" xml:space="preserve">
+  <value>Receipt</value>
+</data>
+
+	<data name="Quick_AddPayment.Content" xml:space="preserve">
+  <value>Payment</value>
+</data>
+
+	<data name="Quick_Transfer.Content" xml:space="preserve">
+  <value>Transfer</value>
+</data>
+
+	<!-- KPI Cards -->
+	<data name="Kpi_TotalRevenue.Title" xml:space="preserve">
+  <value>Total Revenue</value>
+</data>
+
+	<data name="Kpi_TotalExpenses.Title" xml:space="preserve">
+  <value>Total Expenses</value>
+</data>
+
+	<data name="Kpi_NetProfit.Title" xml:space="preserve">
+  <value>Net Profit</value>
+</data>
+
+	<data name="Kpi_CashBalance.Title" xml:space="preserve">
+  <value>Cash Balance</value>
+</data>
+
+	<!-- Transactions -->
+	<data name="Transactions_Title.Text" xml:space="preserve">
+  <value>Recent Transactions</value>
+</data>
+
+	<data name="Transactions_Date.Header" xml:space="preserve">
+  <value>Date</value>
+</data>
+	<data name="Header_Search.PlaceholderText" xml:space="preserve">
+  <value>Search...</value>
+</data>
+
+	<data name="Header_Settings.ToolTip" xml:space="preserve">
+  <value>Settings</value>
+</data>
+
+	<data name="Header_Date.TodayFormat" xml:space="preserve">
+  <value>dddd, MMMM d, yyyy</value>
+</data>
+	<data name="Transactions_Description.Header" xml:space="preserve">
+  <value>Description</value>
+</data>
+
+	<data name="Transactions_Amount.Header" xml:space="preserve">
+  <value>Amount</value>
+</data>
+
+	<data name="Transactions_Status.Header" xml:space="preserve">
+  <value>Status</value>
+</data>
+</root>

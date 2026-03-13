@@ -1,0 +1,263 @@
+<Page
+    x:Class="Promix.Financials.UI.Views.Accounts.ChartOfAccountsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:converters="using:Promix.Financials.UI.Converters"
+    mc:Ignorable="d"
+    FlowDirection="RightToLeft"
+    Background="{StaticResource AppBackgroundBrush}">
+
+    <Page.Resources>
+        <converters:AccountTypeToBrushConverter x:Key="AccountTypeToBrushConverter"/>
+        <converters:AccountIconConverter x:Key="AccountIconConverter"/>
+        <converters:AccountFontWeightConverter x:Key="AccountFontWeightConverter"/>
+        <converters:AccountNameBrushConverter x:Key="AccountNameBrushConverter"/>
+
+        <Style x:Key="EnglishDigitsTextStyle" TargetType="TextBlock">
+            <Setter Property="Language" Value="en-US"/>
+        </Style>
+
+        <Style x:Key="TreeItemStyle" TargetType="TreeViewItem">
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Margin" Value="0,4"/>
+            <Setter Property="IsExpanded" Value="True"/>
+            <Setter Property="MinHeight" Value="44"/>
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Padding="20" RowSpacing="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrushSoft}"
+                    BorderThickness="1"
+                    CornerRadius="16"
+                    Padding="16">
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                Spacing="8"
+                                VerticalAlignment="Center">
+
+                        <Button Click="NewAccount_Click"
+                                Style="{StaticResource PrimaryActionButtonStyle}">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#1D4ED8"/>
+                                <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#1E40AF"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPressed" Color="White"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#1D4ED8"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#1E40AF"/>
+                            </Button.Resources>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE710;" Foreground="White"/>
+                                <TextBlock Text="حساب جديد" Foreground="White"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding RefreshCommand}"
+                                Style="{StaticResource SecondaryActionButtonStyle}">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#CBD5E1"/>
+                                <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#94A3B8"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#1E3A5F"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#1E3A5F"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#CBD5E1"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#94A3B8"/>
+                            </Button.Resources>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE72C;" />
+                                <TextBlock Text="تحديث"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="ExpandAll_Click"
+                                Style="{StaticResource SecondaryActionButtonStyle}">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#CBD5E1"/>
+                                <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#94A3B8"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#1E3A5F"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#1E3A5F"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#CBD5E1"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#94A3B8"/>
+                            </Button.Resources>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE70D;" />
+                                <TextBlock Text="توسيع الكل"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="CollapseAll_Click"
+                                Style="{StaticResource SecondaryActionButtonStyle}">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#CBD5E1"/>
+                                <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#94A3B8"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#1E3A5F"/>
+                                <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#1E3A5F"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#CBD5E1"/>
+                                <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#94A3B8"/>
+                            </Button.Resources>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE70E;" />
+                                <TextBlock Text="طي الكل"/>
+                            </StackPanel>
+                        </Button>
+
+                        <ComboBox Width="160"
+                                  ItemsSource="{Binding FiscalYears}"
+                                  SelectedItem="{Binding SelectedFiscalYear}"
+                                  DisplayMemberPath="DisplayName"
+                                  Language="en-US"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                        <TextBlock Text="شجرة الحسابات"
+                                   FontSize="24"
+                                   FontWeight="SemiBold"/>
+                        <TextBlock Text="عرض هرمي للحسابات (الأب والابن)"
+                                   Foreground="{StaticResource SlateTextBrush}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- KPI -->
+            <Border Grid.Row="1"
+                    Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrushSoft}"
+                    BorderThickness="1"
+                    CornerRadius="16"
+                    Padding="16">
+                <StackPanel Orientation="Horizontal" Spacing="40">
+                    <StackPanel>
+                        <TextBlock Text="الحسابات الفعالة"
+                                   Foreground="{StaticResource SlateTextBrush}"/>
+                        <TextBlock Text="{Binding Kpis.ActiveAccountsText}"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Language="en-US"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Main -->
+            <Border Grid.Row="2"
+                    Background="{StaticResource CardBackgroundBrush}"
+                    BorderBrush="{StaticResource BorderBrushSoft}"
+                    BorderThickness="1"
+                    CornerRadius="16"
+                    Padding="16">
+
+                <Grid RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBox Grid.Row="0"
+                             Width="320"
+                             PlaceholderText="بحث بالكود أو الاسم..."
+                             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TreeView x:Name="AccountsTreeView"
+                              Grid.Row="1"
+                              ItemsSource="{Binding AccountTree}"
+                              ItemContainerStyle="{StaticResource TreeItemStyle}">
+
+                        <TreeView.ItemTemplate>
+                            <DataTemplate>
+                                <TreeViewItem ItemsSource="{Binding Children}">
+                                    <TreeViewItem.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="تفاصيل"
+                                                            Click="AccountDetails_Click"/>
+                                        </MenuFlyout>
+                                    </TreeViewItem.ContextFlyout>
+
+                                    <Border Background="#F8FAFC"
+                                            BorderBrush="#E2E8F0"
+                                            BorderThickness="1"
+                                            CornerRadius="12"
+                                            Padding="10,8"
+                                            Margin="0,2">
+                                        <Grid ColumnSpacing="12" MinHeight="44">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="110"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="130"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Icon -->
+                                            <Border Grid.Column="0"
+                                                    Width="30"
+                                                    Height="30"
+                                                    Background="#EEF2FF"
+                                                    CornerRadius="8"
+                                                    VerticalAlignment="Center">
+                                                <FontIcon Glyph="{Binding TypeText, Converter={StaticResource AccountIconConverter}}"
+                                                          Foreground="#4F46E5"
+                                                          VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center"
+                                                          FontSize="14"/>
+                                            </Border>
+
+                                            <!-- Code -->
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Code}"
+                                                       VerticalAlignment="Center"
+                                                       Language="en-US"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource SlateTextBrush}"/>
+
+                                            <!-- Name -->
+                                            <StackPanel Grid.Column="2"
+                                                        VerticalAlignment="Center"
+                                                        Spacing="2">
+                                                <TextBlock Text="{Binding ArabicName}"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           FontWeight="{Binding TypeText, Converter={StaticResource AccountFontWeightConverter}}"
+                                                           Foreground="{Binding TypeText, Converter={StaticResource AccountNameBrushConverter}}"/>
+
+                                                <TextBlock Text="{Binding Id}"
+                                                           Visibility="Collapsed"/>
+                                            </StackPanel>
+
+                                            <!-- Type Badge -->
+                                            <Border Grid.Column="3"
+                                                    Background="{Binding TypeText, Converter={StaticResource AccountTypeToBrushConverter}}"
+                                                    CornerRadius="20"
+                                                    Padding="10,4"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding TypeText}"
+                                                           Foreground="White"
+                                                           FontSize="11"
+                                                           FontWeight="SemiBold"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </TreeViewItem>
+                            </DataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Promix.Financials.UI.Views.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Background="{StaticResource AppBackgroundBrush}" Padding="24">
+        <StackPanel Spacing="12" MaxWidth="520">
+            <TextBlock x:Uid="Settings_Title"
+                       FontSize="22"
+                       FontWeight="Bold"/>
+
+            <TextBlock x:Uid="Settings_Language"
+                       FontSize="14"
+                       Foreground="{StaticResource MutedTextBrush}"/>
+
+            <ComboBox x:Name="LanguageCombo"
+                      Width="260"
+                      SelectionChanged="LanguageCombo_SelectionChanged"/>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="Promix.Financials.Application/Promix.Financials.Application.csproj" />
+  <Project Path="Promix.Financials.Domain/Promix.Financials.Domain.csproj" />
+  <Project Path="Promix.Financials.Infrastructure/Promix.Financials.Infrastructure.csproj" />
+  <Project Path="Promix.Financials.Migrations/Promix.Financials.Migrations.csproj" Id="916e9a01-0d44-435b-8855-28c93cee6838" />
+  <Project Path="Promix.Financials.UI/Promix.Financials.UI.csproj">
+    <Platform Project="x64" />
+    <Deploy />
+  </Project>
+</Solution>

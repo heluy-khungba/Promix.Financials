@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Promix.Financials.UI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Promix.Financials.UI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

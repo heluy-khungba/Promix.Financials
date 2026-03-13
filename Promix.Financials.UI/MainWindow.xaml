@@ -1,0 +1,33 @@
+<Window
+    x:Class="Promix.Financials.UI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Promix.Financials.UI.Controls">
+
+    <Grid Background="{StaticResource AppBackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="280" />
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT: Header + Content -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <controls:AppHeader x:Name="Header"
+                            Grid.Row="0"/>
+
+            <Frame x:Name="RootFrame"
+               Grid.Row="1"/>
+        </Grid>
+
+        <!-- RIGHT: Sidebar -->
+        <controls:AppSidebar x:Name="Sidebar"
+                         Grid.Column="1"
+                         NavigateRequested="Sidebar_NavigateRequested"
+                         LogoutRequested="Sidebar_LogoutRequested" />
+    </Grid>
+</Window>
