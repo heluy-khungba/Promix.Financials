@@ -1,10 +1,23 @@
 ﻿using Microsoft.UI;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using System;
 using System.Runtime.Versioning;
 
 namespace Promix.Financials.UI.Converters;
+
+[SupportedOSPlatform("windows10.0.19041.0")]
+public sealed class EmptyToCollapsedConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, string language)
+        => string.IsNullOrEmpty(value?.ToString())
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+        => throw new NotImplementedException();
+}
 
 [SupportedOSPlatform("windows10.0.19041.0")]
 public sealed class AccountIconConverter : IValueConverter

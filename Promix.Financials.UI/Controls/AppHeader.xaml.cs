@@ -1,43 +1,37 @@
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.Windows.ApplicationModel.Resources;
 using System;
+using System.Globalization;
 
 namespace Promix.Financials.UI.Controls;
 
 public sealed partial class AppHeader : UserControl
 {
-    private static readonly ResourceManager _resourceManager = new ResourceManager();
-    private static readonly ResourceMap _map = _resourceManager.MainResourceMap;
-
-    public string SettingsTooltip => R("Header_Settings.ToolTip", "Settings");
+    public string SettingsTooltip => "الإعدادات";
     public event EventHandler? SettingsRequested;
+
     public AppHeader()
     {
         InitializeComponent();
         ApplyTexts();
     }
+
     private void Settings_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         SettingsRequested?.Invoke(this, EventArgs.Empty);
     }
+
     private void ApplyTexts()
     {
-        var dateFormat = R("Header_Date.TodayFormat", "dddd, MMMM d, yyyy");
-        DateText.Text = DateTime.Now.ToString(dateFormat);
+        // ✅ التاريخ: اسم اليوم والشهر عربي — اليوم والسنة أرقام إنكليزية
+        var now = DateTime.Now;
+        var dayName = now.ToString("dddd", new CultureInfo("ar-SA"));   // الاثنين
+        var monthName = now.ToString("MMMM", new CultureInfo("ar-SA")); // يناير
+        var day = now.Day.ToString(CultureInfo.InvariantCulture);       // 13  ← إنكليزي
+        var year = now.Year.ToString(CultureInfo.InvariantCulture);     // 2026 ← إنكليزي
 
-        SearchBox.PlaceholderText = R("Header_Search.PlaceholderText", "Search...");
-    }
+        DateText.Text = $"{dayName}، {day} {monthName} {year}";
+        // النتيجة: "الجمعة، 13 مارس 2026"
 
-    private static string R(string key, string fallback)
-    {
-        try
-        {
-            // IMPORTANT: prefix with "Resources/"
-            return _map.GetValue($"Resources/{key}").ValueAsString;
-        }
-        catch
-        {
-            return fallback;
-        }
+        SearchBox.PlaceholderText = "بحث...";
     }
 }

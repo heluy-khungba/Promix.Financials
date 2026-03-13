@@ -8,11 +8,9 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
-                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
-                <ResourceDictionary Source="/Styles/InputStyles.xaml"/>
-                <!-- <ResourceDictionary Source="ms-appx:///Styles/Theme/Colors.xaml"/> -->
-                <!-- <ResourceDictionary Source="ms-appx:///Styles/Theme/Brushes.xaml"/> -->
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls"/>
+                <ResourceDictionary Source="ms-appx:///Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="ms-appx:///Styles/InputStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Brushes -->
@@ -47,6 +45,12 @@
 
             <Style TargetType="ComboBox">
                 <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+                <Setter Property="PlaceholderForeground" Value="#64748B"/>
+            </Style>
+
+            <Style TargetType="TextBox">
+                <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+                <Setter Property="PlaceholderForeground" Value="#64748B"/>
             </Style>
 
             <Style TargetType="ComboBoxItem">

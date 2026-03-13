@@ -99,6 +99,21 @@ public partial class App : Microsoft.UI.Xaml.Application
                     _window.Close();
                 }
             });
+            // ابحث عن هذا الجزء في OnLaunched أو في Constructor
+            UnhandledException += (sender, e) =>
+            {
+                // ✅ اطبع كل تفاصيل الخطأ
+                var msg = $"[CRASH] {e.Exception?.GetType()?.FullName}\n" +
+                          $"Message: {e.Exception?.Message}\n" +
+                          $"Inner: {e.Exception?.InnerException?.Message}\n" +
+                          $"Stack: {e.Exception?.StackTrace}";
+
+                System.Diagnostics.Debug.WriteLine(msg);
+                System.IO.File.WriteAllText(
+                    @"C:\Users\mdien\Desktop\crash_log.txt", msg);
+
+                e.Handled = true; // ✅ يمنع الإغلاق الفوري لترى الرسالة
+            };
         }
     }
 }

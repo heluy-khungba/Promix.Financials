@@ -16,29 +16,6 @@
 
     <ContentDialog.Resources>
         <converters:BoolToCollapsedVisibilityConverter x:Key="BoolToCollapsedVisibilityConverter"/>
-
-        <!-- ✅ Style موحد لكل TextBox في الديالوج -->
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#94A3B8"/>
-            <Setter Property="BorderThickness" Value="1.5"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="MinHeight" Value="42"/>
-        </Style>
-
-        <!-- ✅ Style موحد لكل ComboBox في الديالوج -->
-        <Style TargetType="ComboBox">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#94A3B8"/>
-            <Setter Property="BorderThickness" Value="1.5"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="MinHeight" Value="42"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        </Style>
     </ContentDialog.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="580">
@@ -53,7 +30,6 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
                     <Border Grid.Column="0"
                             Width="46" Height="46"
                             Background="#FFFFFF22"
@@ -65,7 +41,6 @@
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center"/>
                     </Border>
-
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="3">
                         <TextBlock Text="إنشاء حساب جديد"
                                    Foreground="White"
@@ -78,7 +53,7 @@
                 </Grid>
             </Border>
 
-            <!-- ✅ Body — خلفية رمادية واضحة -->
+            <!-- Body -->
             <Border Background="#F1F5F9"
                     BorderBrush="#CBD5E1"
                     BorderThickness="1,0,1,1"
@@ -93,7 +68,6 @@
                             <ColumnDefinition Width="170"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- الحساب الأب -->
                         <StackPanel Grid.Column="0" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <FontIcon Glyph="&#xE8A0;" FontSize="12" Foreground="#2563EB"/>
@@ -101,13 +75,13 @@
                                            FontSize="13" FontWeight="SemiBold"
                                            Foreground="#374151"/>
                             </StackPanel>
-                            <ComboBox ItemsSource="{Binding ParentAccounts}"
+                            <ComboBox Style="{StaticResource InputComboBoxStyle}"
+                                      ItemsSource="{Binding ParentAccounts}"
                                       SelectedItem="{Binding SelectedParentAccount, Mode=TwoWay}"
                                       DisplayMemberPath="DisplayName"
                                       PlaceholderText="(جذر الشجرة)"/>
                         </StackPanel>
 
-                        <!-- الكود التلقائي -->
                         <StackPanel Grid.Column="1" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <FontIcon Glyph="&#xE8B3;" FontSize="12" Foreground="#2563EB"/>
@@ -115,7 +89,6 @@
                                            FontSize="13" FontWeight="SemiBold"
                                            Foreground="#374151"/>
                             </StackPanel>
-                            <!-- ✅ كود واضح على خلفية زرقاء فاتحة -->
                             <Border Background="White"
                                     BorderBrush="#2563EB"
                                     BorderThickness="2"
@@ -123,8 +96,7 @@
                                     Padding="12,10"
                                     MinHeight="42">
                                 <TextBlock Text="{Binding SuggestedCode}"
-                                           FontSize="18"
-                                           FontWeight="Bold"
+                                           FontSize="18" FontWeight="Bold"
                                            Foreground="#2563EB"
                                            Language="en-US"
                                            HorizontalAlignment="Center"
@@ -133,7 +105,6 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- Divider -->
                     <Border Height="1" Background="#CBD5E1"/>
 
                     <!-- Row 2: الأسماء -->
@@ -143,7 +114,6 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- الاسم العربي -->
                         <StackPanel Grid.Column="0" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <FontIcon Glyph="&#xE8D2;" FontSize="12" Foreground="#2563EB"/>
@@ -152,7 +122,8 @@
                                     <Run Text=" *" Foreground="#DC2626"/>
                                 </TextBlock>
                             </StackPanel>
-                            <TextBox Text="{Binding ArabicName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Style="{StaticResource InputTextBoxStyle}"
+                                     Text="{Binding ArabicName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      PlaceholderText="مثال: الصندوق الرئيسي"/>
                             <TextBlock Text="{Binding ArabicNameError}"
                                        Foreground="#DC2626"
@@ -160,7 +131,6 @@
                                        Visibility="{Binding IsArabicNameValid, Converter={StaticResource BoolToCollapsedVisibilityConverter}}"/>
                         </StackPanel>
 
-                        <!-- الاسم الإنكليزي -->
                         <StackPanel Grid.Column="1" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <FontIcon Glyph="&#xE8D2;" FontSize="12" Foreground="#94A3B8"/>
@@ -168,16 +138,16 @@
                                            FontSize="13" FontWeight="SemiBold"
                                            Foreground="#374151"/>
                             </StackPanel>
-                            <TextBox Text="{Binding EnglishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Style="{StaticResource InputTextBoxStyle}"
+                                     Text="{Binding EnglishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      PlaceholderText="e.g. Main Cash"
                                      FlowDirection="LeftToRight"/>
                         </StackPanel>
                     </Grid>
 
-                    <!-- Divider -->
                     <Border Height="1" Background="#CBD5E1"/>
 
-                    <!-- Row 3: النوع + ال��ملة + التصنيف -->
+                    <!-- Row 3: النوع + العملة + التصنيف -->
                     <Grid ColumnSpacing="16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -185,7 +155,6 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- نوع الحساب -->
                         <StackPanel Grid.Column="0" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <FontIcon Glyph="&#xE7C1;" FontSize="12" Foreground="#2563EB"/>
@@ -193,11 +162,11 @@
                                            FontSize="13" FontWeight="SemiBold"
                                            Foreground="#374151"/>
                             </StackPanel>
-                            <ComboBox ItemsSource="{Binding AccountTypes}"
+                            <ComboBox Style="{StaticResource InputComboBoxStyle}"
+                                      ItemsSource="{Binding AccountTypes}"
                                       SelectedItem="{Binding SelectedAccountType, Mode=TwoWay}"/>
                         </StackPanel>
 
-                        <!-- العملة -->
                         <StackPanel Grid.Column="1" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <FontIcon Glyph="&#xE8EE;" FontSize="12" Foreground="#2563EB"/>
@@ -205,12 +174,12 @@
                                            FontSize="13" FontWeight="SemiBold"
                                            Foreground="#374151"/>
                             </StackPanel>
-                            <ComboBox ItemsSource="{Binding Currencies}"
+                            <ComboBox Style="{StaticResource InputComboBoxStyle}"
+                                      ItemsSource="{Binding Currencies}"
                                       SelectedItem="{Binding SelectedCurrency, Mode=TwoWay}"
                                       DisplayMemberPath="DisplayName"/>
                         </StackPanel>
 
-                        <!-- التصنيف التلقائي -->
                         <StackPanel Grid.Column="2" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <FontIcon Glyph="&#xE946;" FontSize="12" Foreground="#2563EB"/>
@@ -218,7 +187,6 @@
                                            FontSize="13" FontWeight="SemiBold"
                                            Foreground="#374151"/>
                             </StackPanel>
-                            <!-- ✅ Badge تصنيف واضح -->
                             <Border Background="White"
                                     BorderBrush="#2563EB"
                                     BorderThickness="1.5"
@@ -235,7 +203,6 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- Divider -->
                     <Border Height="1" Background="#CBD5E1"/>
 
                     <!-- Row 4: الدور + الحالة -->
@@ -245,7 +212,6 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- دور النظام -->
                         <StackPanel Grid.Column="0" Spacing="6">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <FontIcon Glyph="&#xE8D7;" FontSize="12" Foreground="#2563EB"/>
@@ -253,17 +219,16 @@
                                            FontSize="13" FontWeight="SemiBold"
                                            Foreground="#374151"/>
                             </StackPanel>
-                            <ComboBox ItemsSource="{Binding SystemRoles}"
+                            <ComboBox Style="{StaticResource InputComboBoxStyle}"
+                                      ItemsSource="{Binding SystemRoles}"
                                       SelectedItem="{Binding SelectedSystemRole, Mode=TwoWay}"
                                       PlaceholderText="بدون"/>
                         </StackPanel>
 
-                        <!-- الحالة -->
                         <StackPanel Grid.Column="1" Spacing="6" VerticalAlignment="Bottom">
                             <TextBlock Text="الحالة"
                                        FontSize="13" FontWeight="SemiBold"
                                        Foreground="#374151"/>
-                            <!-- ✅ ToggleSwitch على خلفية بيضاء واضحة -->
                             <Border Background="White"
                                     BorderBrush="#CBD5E1"
                                     BorderThickness="1.5"
@@ -277,7 +242,6 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- Divider -->
                     <Border Height="1" Background="#CBD5E1"/>
 
                     <!-- Row 5: الملاحظات -->
@@ -288,11 +252,10 @@
                                        FontSize="13" FontWeight="SemiBold"
                                        Foreground="#374151"/>
                         </StackPanel>
-                        <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource MultilineTextBoxStyle}"
+                                 Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  PlaceholderText="أي ملاحظات إضافية..."
-                                 TextWrapping="Wrap"
-                                 Height="72"
-                                 AcceptsReturn="True"/>
+                                 Height="72"/>
                     </StackPanel>
 
                 </StackPanel>

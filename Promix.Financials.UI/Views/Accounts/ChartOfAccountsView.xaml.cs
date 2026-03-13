@@ -16,28 +16,62 @@ namespace Promix.Financials.UI.Views.Accounts;
 public sealed partial class ChartOfAccountsView : Page
 {
     private readonly ChartOfAccountsViewModel _vm;
+    private readonly IServiceScope _scope; // ✅ hold scope alive for VM lifetime
 
     public ChartOfAccountsView()
     {
         InitializeComponent();
+
         var app = (App)Microsoft.UI.Xaml.Application.Current;
-        _vm = app.Services.GetRequiredService<ChartOfAccountsViewModel>();
+
+        // ✅ Resolve VM from a scope — prevents captive dependency crash
+        _scope = app.Services.CreateScope();
+        _vm = _scope.ServiceProvider.GetRequiredService<ChartOfAccountsViewModel>();
+
         DataContext = _vm;
         Loaded += OnLoaded;
+        Unloaded += OnUnloaded; // ✅ dispose scope when page is unloaded
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
-        var app = (App)Microsoft.UI.Xaml.Application.Current;
-        var userContext = app.Services.GetRequiredService<IUserContext>();
-        var companyId = userContext.CompanyId ?? Guid.Empty;
-        if (companyId == Guid.Empty) return;
-        await _vm.InitializeAsync(companyId);
+        try
+        {
+            System.Diagnostics.Debug.WriteLine("[OnLoaded] START");
+
+            var userContext = _scope.ServiceProvider.GetRequiredService<IUserContext>();
+            System.Diagnostics.Debug.WriteLine("[OnLoaded] userContext OK");
+
+            var companyId = userContext.CompanyId ?? Guid.Empty;
+            System.Diagnostics.Debug.WriteLine($"[OnLoaded] companyId = {companyId}");
+
+            if (companyId == Guid.Empty)
+            {
+                System.Diagnostics.Debug.WriteLine("[OnLoaded] companyId is EMPTY — return");
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine("[OnLoaded] calling InitializeAsync...");
+            await _vm.InitializeAsync(companyId);
+            System.Diagnostics.Debug.WriteLine("[OnLoaded] InitializeAsync DONE");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[OnLoaded] EXCEPTION: {ex}");
+            await ShowErrorAsync("خطأ عند التحميل", ex.ToString());
+        }
     }
 
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        _scope.Dispose();
+    }
+
+    // ✅ زر "حساب جديد" بدون حساب أب مسبق
     private async void NewAccount_Click(object sender, RoutedEventArgs e)
         => await OpenNewAccountDialogAsync(preselectedParentCode: null);
 
+    // ✅ كليك يمين → إضافة حساب ابن
     private async void AddChildAccount_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not MenuFlyoutItem item) return;
@@ -140,7 +174,6 @@ public sealed partial class ChartOfAccountsView : Page
         _ = dialog.ShowAsync();
     }
 
-    // ✅ الحل الصحيح: استخدام VisualTree بدل RootNodes
     private void ExpandAll_Click(object sender, RoutedEventArgs e)
         => SetExpandStateAll(AccountsTreeView, true);
 
@@ -149,15 +182,11 @@ public sealed partial class ChartOfAccountsView : Page
 
     private static void SetExpandStateAll(DependencyObject parent, bool isExpanded)
     {
-        var count = VisualTreeHelper.GetChildrenCount(parent);
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
         {
             var child = VisualTreeHelper.GetChild(parent, i);
-
             if (child is TreeViewItem tvi)
                 tvi.IsExpanded = isExpanded;
-
-            // تطبيق recursive على كل الأبناء
             SetExpandStateAll(child, isExpanded);
         }
     }

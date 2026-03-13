@@ -14,6 +14,7 @@
         <converters:AccountIconConverter x:Key="AccountIconConverter"/>
         <converters:AccountFontWeightConverter x:Key="AccountFontWeightConverter"/>
         <converters:AccountNameBrushConverter x:Key="AccountNameBrushConverter"/>
+        <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter"/>
 
         <Style x:Key="EnglishDigitsTextStyle" TargetType="TextBlock">
             <Setter Property="Language" Value="en-US"/>
