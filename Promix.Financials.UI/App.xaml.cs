@@ -24,6 +24,26 @@ public partial class App : Microsoft.UI.Xaml.Application
     {
         InitializeComponent();
 
+        // ✅ UnhandledException في Constructor — المكان الصحيح
+        UnhandledException += (sender, e) =>
+        {
+            var msg = $"[CRASH] {e.Exception?.GetType()?.FullName}\n" +
+                      $"Message: {e.Exception?.Message}\n" +
+                      $"Inner: {e.Exception?.InnerException?.Message}\n" +
+                      $"Stack: {e.Exception?.StackTrace}";
+
+            System.Diagnostics.Debug.WriteLine(msg);
+
+            try
+            {
+                System.IO.File.WriteAllText(
+                    @"C:\Users\mdien\Desktop\crash_log.txt", msg);
+            }
+            catch { /* تجاهل إذا فشل الكتابة */ }
+
+            e.Handled = true;
+        };
+
         var savedLang = ApplicationData.Current.LocalSettings.Values["AppLanguage"] as string;
         if (!string.IsNullOrWhiteSpace(savedLang))
             ApplicationLanguages.PrimaryLanguageOverride = savedLang;
@@ -74,19 +94,17 @@ public partial class App : Microsoft.UI.Xaml.Application
         }
         catch (Exception ex)
         {
-            // Show a dialog before crashing — prevents silent 0xC000027B exit
+            // ✅ عرض خطأ واضح عند فشل التشغيل
             _window = new Window();
             _window.Activate();
 
             var dialog = new Microsoft.UI.Xaml.Controls.ContentDialog
             {
-                Title = "Startup Error",
-                Content = $"The application failed to start:\n\n{ex.Message}\n\nCheck the database connection and try again.",
-                CloseButtonText = "Close",
-                XamlRoot = _window.Content?.XamlRoot
+                Title = "خطأ في التشغيل",
+                Content = $"فشل تشغيل التطبيق:\n\n{ex.Message}\n\nتحقق من اتصال قاعدة البيانات.",
+                CloseButtonText = "إغلاق",
             };
 
-            // Ensure XamlRoot is available after activation
             _window.DispatcherQueue.TryEnqueue(async () =>
             {
                 try
@@ -99,21 +117,6 @@ public partial class App : Microsoft.UI.Xaml.Application
                     _window.Close();
                 }
             });
-            // ابحث عن هذا الجزء في OnLaunched أو في Constructor
-            UnhandledException += (sender, e) =>
-            {
-                // ✅ اطبع كل تفاصيل الخطأ
-                var msg = $"[CRASH] {e.Exception?.GetType()?.FullName}\n" +
-                          $"Message: {e.Exception?.Message}\n" +
-                          $"Inner: {e.Exception?.InnerException?.Message}\n" +
-                          $"Stack: {e.Exception?.StackTrace}";
-
-                System.Diagnostics.Debug.WriteLine(msg);
-                System.IO.File.WriteAllText(
-                    @"C:\Users\mdien\Desktop\crash_log.txt", msg);
-
-                e.Handled = true; // ✅ يمنع الإغلاق الفوري لترى الرسالة
-            };
         }
     }
 }
