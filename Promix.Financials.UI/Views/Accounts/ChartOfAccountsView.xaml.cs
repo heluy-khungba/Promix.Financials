@@ -3,6 +3,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Promix.Financials.Application.Abstractions;
+using Promix.Financials.Application.Features.Accounts;
+using Promix.Financials.Domain.Enums;
 using Promix.Financials.UI.Dialogs.Accounts;
 using Promix.Financials.UI.ViewModels.Accounts;
 using Promix.Financials.UI.ViewModels.Accounts.Models;
@@ -59,7 +61,63 @@ public sealed partial class ChartOfAccountsView : Page
             return;
 
         var draft = vm.BuildDraft();
-        // لاحقًا: الربط مع CreateAccountService
+        var nature = DeriveNature(draft.Code);
+
+        try
+        {
+            using var scope = app.Services.CreateScope();
+            var createService = scope.ServiceProvider.GetRequiredService<CreateAccountService>();
+
+            var command = new CreateAccountCommand(
+                CompanyId: draft.CompanyId,
+                ParentId: draft.ParentId,
+                Code: draft.Code,
+                ArabicName: draft.ArabicName,
+                EnglishName: draft.EnglishName,
+                IsPosting: draft.IsPosting,
+                Nature: nature,
+                CurrencyCode: draft.CurrencyCode,
+                SystemRole: draft.SystemRole,
+                IsActive: draft.IsActive,
+                Notes: draft.Notes
+            );
+
+            await createService.CreateAsync(command);
+
+            await _vm.InitializeAsync(companyId);
+        }
+        catch (Promix.Financials.Domain.Exceptions.BusinessRuleException ex)
+        {
+            var errorDialog = new ContentDialog
+            {
+                Title = "تعذّر إنشاء الحساب",
+                Content = ex.Message,
+                CloseButtonText = "حسناً",
+                XamlRoot = this.XamlRoot
+            };
+            await errorDialog.ShowAsync();
+        }
+        catch (Exception ex)
+        {
+            var errorDialog = new ContentDialog
+            {
+                Title = "خطأ غير متوقع",
+                Content = ex.Message,
+                CloseButtonText = "حسناً",
+                XamlRoot = this.XamlRoot
+            };
+            await errorDialog.ShowAsync();
+        }
+    }
+
+    private static AccountNature DeriveNature(string? code)
+    {
+        var root = code?.Split('.').FirstOrDefault() ?? "";
+        return root switch
+        {
+            "2" or "3" or "4" => AccountNature.Credit,
+            _ => AccountNature.Debit
+        };
     }
 
     private void AccountDetails_Click(object sender, RoutedEventArgs e)

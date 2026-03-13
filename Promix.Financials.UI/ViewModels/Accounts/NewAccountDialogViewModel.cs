@@ -195,15 +195,16 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
     // Dialog output
     public NewAccountDraftVm BuildDraft()
         => new(
-            code: SuggestedCode,
-            parentId: SelectedParentAccount?.Id,
-            arabicName: ArabicName.Trim(),
-            englishName: string.IsNullOrWhiteSpace(EnglishName) ? null : EnglishName.Trim(),
-            accountType: SelectedAccountType,
-            currency: SelectedCurrency,
-            systemRole: string.IsNullOrWhiteSpace(SelectedSystemRole) ? null : SelectedSystemRole,
-            isActive: IsActive,
-            notes: string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim()
+            CompanyId: _companyId,
+            ParentId: SelectedParentAccount?.Id,
+            Code: SuggestedCode,
+            ArabicName: ArabicName.Trim(),
+            EnglishName: string.IsNullOrWhiteSpace(EnglishName) ? null : EnglishName.Trim(),
+            IsPosting: SelectedAccountType == "Postable",
+            CurrencyCode: string.IsNullOrWhiteSpace(SelectedCurrency) ? null : SelectedCurrency,
+            SystemRole: string.IsNullOrWhiteSpace(SelectedSystemRole) ? null : SelectedSystemRole,
+            Notes: string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim(),
+            IsActive: IsActive
         );
 
     private void RecomputeSuggestedCode()
@@ -290,13 +291,14 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
 public sealed record ParentAccountOptionVm(Guid? Id, string DisplayName, string Code);
 
 public sealed record NewAccountDraftVm(
-    string code,
-    Guid? parentId,
-    string arabicName,
-    string? englishName,
-    string accountType,
-    string currency,
-    string? systemRole,
-    bool isActive,
-    string? notes
+    Guid CompanyId,
+    Guid? ParentId,
+    string Code,
+    string ArabicName,
+    string? EnglishName,
+    bool IsPosting,
+    string? CurrencyCode,
+    string? SystemRole,
+    string? Notes,
+    bool IsActive
 );
