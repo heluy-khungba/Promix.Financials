@@ -5,21 +5,23 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Promix.Financials.Application.Abstractions;
 using Promix.Financials.Application.Features.Accounts;
+using Promix.Financials.Application.Features.Companies;
 
 namespace Promix.Financials.UI.ViewModels.Accounts;
 
 public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
 {
     private readonly IChartOfAccountsQuery _query;
+    private readonly ICurrencyLookupService _currencyLookup;
 
     public ObservableCollection<ParentAccountOptionVm> ParentAccounts { get; } = new();
     public ObservableCollection<string> AccountTypes { get; } = new() { "Group", "Postable" };
 
-    // لاحقاً: العملات تُقرأ من إعدادات الشركة + BaseCurrency
-    public ObservableCollection<string> Currencies { get; } = new() { "USD", "IQD", "EUR" };
+    // ✅ العملات تُقرأ من DB عبر ICurrencyLookupService
+    public ObservableCollection<CurrencyOptionDto> Currencies { get; } = new();
 
-    // لاحقاً: enum + Localization
     public ObservableCollection<string> SystemRoles { get; } = new()
     {
         "", // None
@@ -28,21 +30,21 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
     };
 
     private Guid _companyId = Guid.Empty;
-
-    // cache of flat accounts for code suggestion / category derivation
     private List<AccountFlatDto> _flat = new();
 
-    public NewAccountDialogViewModel(IChartOfAccountsQuery query)
+    public NewAccountDialogViewModel(
+        IChartOfAccountsQuery query,
+        ICurrencyLookupService currencyLookup)
     {
         _query = query;
+        _currencyLookup = currencyLookup;
 
         // defaults
         _selectedAccountType = "Postable";
-        _selectedCurrency = "USD";
+        _selectedCurrency = null;
         _selectedSystemRole = "";
         _isActive = true;
 
-        // لا نضيف Placeholder هنا بعد الآن
         ParentAccounts.Clear();
         ParentAccounts.Add(new ParentAccountOptionVm(null, "(Root)", ""));
         SelectedParentAccount = ParentAccounts.FirstOrDefault();
@@ -50,26 +52,28 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// يجب استدعاؤها قبل فتح الديالوج لملء ParentAccounts من DB
+    /// يجب استدعاؤها قبل فتح الديالوج لملء ParentAccounts والعملات من DB
     /// </summary>
     public async Task InitializeAsync(Guid companyId)
     {
         _companyId = companyId;
 
+        // ✅ جلب الحسابات والعملات معاً
+        // ✅ جلب متسلسل (Sequential) لتجنب تعارض DbContext
         var rows = await _query.GetAccountsAsync(companyId);
+        var currencyList = await _currencyLookup.GetActiveCurrenciesAsync();
 
-        // فقط الحسابات التجميعية (غير حركية) كـ Parents
+        // --- ParentAccounts ---
         _flat = rows.ToList();
 
         var parents = rows
-            .Where(a => !a.IsPosting) // Group accounts only
+            .Where(a => !a.IsPosting)
             .OrderBy(a => a.Code, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         ParentAccounts.Clear();
         ParentAccounts.Add(new ParentAccountOptionVm(null, "(Root)", ""));
 
-        // عرض هرمي بسيط بالـ indent حسب عمق الكود
         foreach (var p in parents)
         {
             var indent = GetIndentFromCode(p.Code);
@@ -77,15 +81,23 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
             ParentAccounts.Add(new ParentAccountOptionVm(p.Id, display, p.Code));
         }
 
-        // حاول تعيين Root افتراضياً
         SelectedParentAccount = ParentAccounts.FirstOrDefault();
         RecomputeSuggestedCode();
+
+        // ✅ --- Currencies من DB ---
+        Currencies.Clear();
+        foreach (var c in currencyList)
+            Currencies.Add(c);
+
+        // اختر USD افتراضياً إن وُجدت، وإلا أول عملة
+        SelectedCurrency = Currencies.FirstOrDefault(c => c.Code == "USD")
+                        ?? Currencies.FirstOrDefault();
     }
 
     private static string GetIndentFromCode(string code)
     {
         if (string.IsNullOrWhiteSpace(code)) return "";
-        var depth = code.Count(c => c == '.'); // 0 => root group, 1 => child, ...
+        var depth = code.Count(c => c == '.');
         return new string(' ', depth * 2);
     }
 
@@ -98,7 +110,6 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
             if (_selectedParentAccount == value) return;
             _selectedParentAccount = value;
             OnPropertyChanged();
-
             RecomputeSuggestedCode();
             RecomputeDerivedCategory();
         }
@@ -132,8 +143,9 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
         set { if (_selectedAccountType == value) return; _selectedAccountType = value; OnPropertyChanged(); }
     }
 
-    private string _selectedCurrency;
-    public string SelectedCurrency
+    // ✅ نوع CurrencyOptionDto بدل string
+    private CurrencyOptionDto? _selectedCurrency;
+    public CurrencyOptionDto? SelectedCurrency
     {
         get => _selectedCurrency;
         set { if (_selectedCurrency == value) return; _selectedCurrency = value; OnPropertyChanged(); }
@@ -160,7 +172,6 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
         set { if (_notes == value) return; _notes = value; OnPropertyChanged(); }
     }
 
-    // Validation
     private bool _isArabicNameValid = true;
     public bool IsArabicNameValid
     {
@@ -184,93 +195,99 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
         if (string.IsNullOrWhiteSpace(ArabicName))
         {
             IsArabicNameValid = false;
-            ArabicNameError = "Arabic name is required.";
-            return;
+            ArabicNameError = "اسم الحساب بالعربية إلزامي.";
         }
-
-        IsArabicNameValid = true;
-        ArabicNameError = "";
+        else
+        {
+            IsArabicNameValid = true;
+            ArabicNameError = "";
+        }
     }
 
-    // Dialog output
+    // ✅ BuildDraft يأخذ Code من CurrencyOptionDto
     public NewAccountDraftVm BuildDraft()
-        => new(
-            code: SuggestedCode,
-            parentId: SelectedParentAccount?.Id,
-            arabicName: ArabicName.Trim(),
-            englishName: string.IsNullOrWhiteSpace(EnglishName) ? null : EnglishName.Trim(),
-            accountType: SelectedAccountType,
-            currency: SelectedCurrency,
-            systemRole: string.IsNullOrWhiteSpace(SelectedSystemRole) ? null : SelectedSystemRole,
-            isActive: IsActive,
-            notes: string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim()
+    {
+        return new NewAccountDraftVm(
+            CompanyId: _companyId,
+            ParentId: SelectedParentAccount?.Id,
+            Code: SuggestedCode,
+            ArabicName: ArabicName.Trim(),
+            EnglishName: string.IsNullOrWhiteSpace(EnglishName) ? null : EnglishName.Trim(),
+            IsPosting: SelectedAccountType == "Postable",
+            CurrencyCode: SelectedCurrency?.Code,
+            SystemRole: string.IsNullOrWhiteSpace(SelectedSystemRole) ? null : SelectedSystemRole,
+            Notes: string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim(),
+            IsActive: IsActive
         );
+    }
 
     private void RecomputeSuggestedCode()
     {
-        var parent = SelectedParentAccount;
-        var parentId = parent?.Id;
-        var parentCode = parent?.Code ?? "";
+        var parentCode = SelectedParentAccount?.Code ?? "";
 
-        if (_companyId == Guid.Empty || _flat.Count == 0)
+        if (string.IsNullOrWhiteSpace(parentCode))
         {
-            // في حال لم يتم InitializeAsync بعد
-            SuggestedCode = string.IsNullOrWhiteSpace(parentCode) ? "1" : $"{parentCode}.1";
-            return;
+            // Root level: 1, 2, 3, ...
+            var rootCodes = _flat
+                .Where(a => !a.Code.Contains('.'))
+                .Select(a => a.Code)
+                .ToList();
+
+            var next = ComputeNextSegment(rootCodes, "");
+            SuggestedCode = next.ToString();
         }
+        else
+        {
+            var children = _flat
+                .Where(a => a.Code.StartsWith(parentCode + ".", StringComparison.Ordinal)
+                         && a.Code.Count(c => c == '.') == parentCode.Count(c => c == '.') + 1)
+                .Select(a => a.Code)
+                .ToList();
 
-        // siblings = نفس ParentId
-        var siblings = _flat
-            .Where(a => a.ParentId == parentId)
-            .Select(a => a.Code)
-            .ToList();
-
-        var next = ComputeNextSegment(siblings, parentCode);
-
-        SuggestedCode = string.IsNullOrWhiteSpace(parentCode)
-            ? next.ToString()
-            : $"{parentCode}.{next}";
+            var next = ComputeNextSegment(children, parentCode);
+            SuggestedCode = $"{parentCode}.{next}";
+        }
     }
 
     private static int ComputeNextSegment(List<string> siblingCodes, string parentCode)
     {
-        // نستخرج آخر جزء رقمي بعد آخر "."
-        // مثال: parent=1.1 => siblings: 1.1.1, 1.1.2 => next=3
-        // مثال: parent=root => siblings: 1,2,3 => next=4
-        var max = 0;
+        var maxSegment = 0;
 
         foreach (var code in siblingCodes)
         {
-            if (string.IsNullOrWhiteSpace(code)) continue;
+            var lastPart = string.IsNullOrWhiteSpace(parentCode)
+                ? code
+                : code.Substring(parentCode.Length + 1);
 
-            // تأكد أنه فعلاً تحت نفس parent code عندما parentCode غير فارغ
-            if (!string.IsNullOrWhiteSpace(parentCode))
-            {
-                if (!code.StartsWith(parentCode + ".", StringComparison.OrdinalIgnoreCase))
-                    continue;
-            }
+            var dotIndex = lastPart.IndexOf('.');
+            var segment = dotIndex >= 0 ? lastPart.Substring(0, dotIndex) : lastPart;
 
-            var lastSegment = code.Split('.').LastOrDefault();
-            if (int.TryParse(lastSegment, out var n))
-                max = Math.Max(max, n);
+            if (int.TryParse(segment, out var num) && num > maxSegment)
+                maxSegment = num;
         }
 
-        return max + 1;
+        return maxSegment + 1;
     }
 
     private void RecomputeDerivedCategory()
     {
-        // مبدئياً من prefix (كما كان عندك)
-        var code = SelectedParentAccount?.Code ?? "";
+        var parentCode = SelectedParentAccount?.Code ?? "";
 
-        DerivedCategoryText = code switch
+        if (string.IsNullOrWhiteSpace(parentCode))
         {
-            "" => "Root (auto later)",
-            var c when c.StartsWith("1") => "Assets",
-            var c when c.StartsWith("2") => "Liabilities",
-            var c when c.StartsWith("3") => "Equity",
-            var c when c.StartsWith("4") => "Revenue",
-            var c when c.StartsWith("5") => "Expenses",
+            DerivedCategoryText = "—";
+            return;
+        }
+
+        var root = parentCode.Split('.')[0];
+
+        DerivedCategoryText = root switch
+        {
+            "1" => "موجودات",
+            "2" => "خصوم",
+            "3" => "حقوق الملكية",
+            "4" => "إيرادات",
+            "5" => "مصروفات",
             _ => "—"
         };
     }
@@ -287,16 +304,30 @@ public sealed class NewAccountDialogViewModel : INotifyPropertyChanged
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
 
-public sealed record ParentAccountOptionVm(Guid? Id, string DisplayName, string Code);
+// ✅ Helper VMs
+public sealed class ParentAccountOptionVm
+{
+    public Guid? Id { get; }
+    public string DisplayName { get; }
+    public string Code { get; }
+
+    public ParentAccountOptionVm(Guid? id, string displayName, string code)
+    {
+        Id = id;
+        DisplayName = displayName;
+        Code = code;
+    }
+}
 
 public sealed record NewAccountDraftVm(
-    string code,
-    Guid? parentId,
-    string arabicName,
-    string? englishName,
-    string accountType,
-    string currency,
-    string? systemRole,
-    bool isActive,
-    string? notes
+    Guid CompanyId,
+    Guid? ParentId,
+    string Code,
+    string ArabicName,
+    string? EnglishName,
+    bool IsPosting,
+    string? CurrencyCode,
+    string? SystemRole,
+    string? Notes,
+    bool IsActive
 );

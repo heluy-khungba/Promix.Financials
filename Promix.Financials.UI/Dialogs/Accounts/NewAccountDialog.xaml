@@ -115,7 +115,9 @@
                     <TextBlock Text="العملة" Opacity="0.75"/>
                     <ComboBox
                         ItemsSource="{Binding Currencies}"
-                        SelectedItem="{Binding SelectedCurrency, Mode=TwoWay}"/>
+                        SelectedItem="{Binding SelectedCurrency, Mode=TwoWay}"
+                        DisplayMemberPath="DisplayName"/>
+                    
                 </StackPanel>
 
                 <!-- Derived category (read-only) -->
