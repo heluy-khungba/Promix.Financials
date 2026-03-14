@@ -16,7 +16,7 @@ public sealed class PromixDbContext : DbContext
     public DbSet<UserCompany> UserCompanies => Set<UserCompany>();
 
     public DbSet<Account> Accounts => Set<Account>();
-    public DbSet<Currency> Currencies => Set<Currency>();
+    public DbSet<DefaultCurrency> Currencies => Set<DefaultCurrency>();
     public DbSet<CurrencyRate> CurrencyRates => Set<CurrencyRate>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

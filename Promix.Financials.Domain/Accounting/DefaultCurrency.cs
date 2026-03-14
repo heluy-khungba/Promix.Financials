@@ -3,11 +3,10 @@ using Promix.Financials.Domain.Exceptions;
 
 namespace Promix.Financials.Domain.Accounting;
 
-public sealed class Currency : Entity<string>
+public sealed class DefaultCurrency : Entity<string>
 {
-    private Currency() { }
 
-    public Currency(
+    public DefaultCurrency(
         string code,
         string nameAr,
         string? nameEn,

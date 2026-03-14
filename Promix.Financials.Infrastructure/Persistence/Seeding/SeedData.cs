@@ -12,13 +12,13 @@ public static class SeedData
         if (!await db.Currencies.AnyAsync())
         {
             db.Currencies.AddRange(
-    new Currency("USD", "دولار أمريكي", "US Dollar", "$", 2, true, true, 1),
-    new Currency("EUR", "يورو", "Euro", "€", 2, true, true, 2),
-    new Currency("SAR", "ريال سعودي", "Saudi Riyal", "ر.س", 2, true, true, 3),
-    new Currency("AED", "درهم إماراتي", "UAE Dirham", "د.إ", 2, true, true, 4),
-    new Currency("IQD", "دينار عراقي", "Iraqi Dinar", "د.ع", 2, true, true, 5),
-    new Currency("TRY", "ليرة تركية", "Turkish Lira", "₺", 2, true, true, 6),
-    new Currency("SYP", "ليرة سورية", "Syrian Pound", "£S", 2, true, true, 7)
+    new DefaultCurrency("USD", "دولار أمريكي", "US Dollar", "$", 2, true, true, 1),
+    new DefaultCurrency("EUR", "يورو", "Euro", "€", 2, true, true, 2),
+    new DefaultCurrency("SAR", "ريال سعودي", "Saudi Riyal", "ر.س", 2, true, true, 3),
+    new DefaultCurrency("AED", "درهم إماراتي", "UAE Dirham", "د.إ", 2, true, true, 4),
+    new DefaultCurrency("IQD", "دينار عراقي", "Iraqi Dinar", "د.ع", 2, true, true, 5),
+    new DefaultCurrency("TRY", "ليرة تركية", "Turkish Lira", "₺", 2, true, true, 6),
+    new DefaultCurrency("SYP", "ليرة سورية", "Syrian Pound", "£S", 2, true, true, 7)
 );
 
             await db.SaveChangesAsync();
@@ -26,7 +26,7 @@ public static class SeedData
         var hasSyp = await db.Currencies.AnyAsync(x => x.Id == "SYP");
         if (!hasSyp)
         {
-            db.Currencies.Add(new Currency("SYP", "ليرة سورية", "Syrian Pound", "£S", 2, true, true, 7));
+            db.Currencies.Add(new DefaultCurrency("SYP", "ليرة سورية", "Syrian Pound", "£S", 2, true, true, 7));
             await db.SaveChangesAsync();
         }
         // 1) Company MAIN

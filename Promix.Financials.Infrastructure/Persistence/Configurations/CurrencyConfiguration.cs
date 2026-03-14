@@ -4,9 +4,9 @@ using Promix.Financials.Domain.Accounting;
 
 namespace Promix.Financials.Infrastructure.Persistence.Configurations;
 
-public sealed class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
+public sealed class CurrencyConfiguration : IEntityTypeConfiguration<DefaultCurrency>
 {
-    public void Configure(EntityTypeBuilder<Currency> builder)
+    public void Configure(EntityTypeBuilder<DefaultCurrency> builder)
     {
         builder.ToTable("Currencies");
 
