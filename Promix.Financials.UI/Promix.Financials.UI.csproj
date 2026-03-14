@@ -19,6 +19,7 @@
     <None Remove="Controls\KpiCards.xaml" />
     <None Remove="Controls\QuickActions.xaml" />
     <None Remove="Controls\TransactionsTable.xaml" />
+    <None Remove="Dialogs\Accounts\EditAccountDialog.xaml" />
     <None Remove="Dialogs\Accounts\NewAccountDialog.xaml" />
     <None Remove="Dialogs\Companies\NewCompanyDialog.xaml" />
     <None Remove="Styles\Buttons.xaml" />
@@ -100,6 +101,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+	
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
@@ -168,5 +170,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="ViewModels\Companies\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Dialogs\Accounts\EditAccountDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 </Project>

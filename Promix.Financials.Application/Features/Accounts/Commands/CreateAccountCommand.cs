@@ -1,6 +1,6 @@
 ﻿using Promix.Financials.Domain.Enums;
 
-namespace Promix.Financials.Application.Features.Accounts;
+namespace Promix.Financials.Application.Features.Accounts.Commands;
 
 public sealed record CreateAccountCommand(
     Guid CompanyId,

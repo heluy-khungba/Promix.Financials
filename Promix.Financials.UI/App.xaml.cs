@@ -2,14 +2,15 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Promix.Financials.Application.Abstractions;
+using Promix.Financials.Application.Features.Accounts.Services;
 using Promix.Financials.Infrastructure;
+using Promix.Financials.Infrastructure.Persistence;
+using Promix.Financials.Infrastructure.Persistence.Seeding;
 using Promix.Financials.UI.Security;
 using Promix.Financials.UI.ViewModels.Accounts;
 using System;
 using Windows.Globalization;
 using Windows.Storage;
-using Promix.Financials.Infrastructure.Persistence;
-using Promix.Financials.Infrastructure.Persistence.Seeding;
 
 namespace Promix.Financials.UI;
 
@@ -56,9 +57,12 @@ public partial class App : Microsoft.UI.Xaml.Application
                 services.AddInfrastructure(cs);
 
                 services.AddSingleton<ISessionStore, LocalSettingsSessionStore>();
-
                 services.AddTransient<ChartOfAccountsViewModel>();
                 services.AddTransient<NewAccountDialogViewModel>();
+                services.AddTransient<CreateAccountService>();        // إذا لم يكن مسجلاً
+                services.AddTransient<EditAccountService>();          // 🆕
+                services.AddTransient<DeleteAccountService>();
+                services.AddTransient<EditAccountDialogViewModel>();  // 🆕
             })
             .Build();
     }

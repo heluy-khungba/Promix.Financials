@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Promix.Financials.Application.Abstractions;
-using Promix.Financials.Application.Features.Accounts;
+using Promix.Financials.Application.Features.Accounts.Queries;
 using Promix.Financials.Application.Features.Companies;
 
 namespace Promix.Financials.UI.ViewModels.Accounts;

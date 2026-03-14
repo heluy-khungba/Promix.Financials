@@ -221,15 +221,37 @@
                                     <TreeViewItem.ContextFlyout>
                                         <MenuFlyout>
                                             <MenuFlyoutItem Text="إضافة حساب ابن"
-                                                            Click="AddChildAccount_Click"
-                                                            Tag="{Binding}">
+                        Click="AddChildAccount_Click"
+                        Tag="{Binding}">
                                                 <MenuFlyoutItem.Icon>
                                                     <FontIcon Glyph="&#xE710;"/>
                                                 </MenuFlyoutItem.Icon>
                                             </MenuFlyoutItem>
+
                                             <MenuFlyoutSeparator/>
+
+                                            <MenuFlyoutItem Text="تعديل"
+                        Click="EditAccount_Click"
+                        Tag="{Binding}">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE70F;"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+
+                                            <MenuFlyoutItem Text="حذف"
+                        Click="DeleteAccount_Click"
+                        Tag="{Binding}"
+                        Foreground="#DC2626">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE74D;" Foreground="#DC2626"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+
+                                            <MenuFlyoutSeparator/>
+
                                             <MenuFlyoutItem Text="تفاصيل"
-                                                            Click="AccountDetails_Click">
+                        Click="AccountDetails_Click"
+                        Tag="{Binding}">
                                                 <MenuFlyoutItem.Icon>
                                                     <FontIcon Glyph="&#xE946;"/>
                                                 </MenuFlyoutItem.Icon>

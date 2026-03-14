@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Promix.Financials.Application.Features.Accounts;
+using Promix.Financials.Application.Features.Accounts.Queries;
 using Promix.Financials.Domain.Aggregates.Accounts;
 using Promix.Financials.Infrastructure.Persistence;
 

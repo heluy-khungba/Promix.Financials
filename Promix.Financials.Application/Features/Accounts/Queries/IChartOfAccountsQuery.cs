@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Promix.Financials.Application.Features.Accounts;
+namespace Promix.Financials.Application.Features.Accounts.Queries;
 
 public sealed record AccountFlatDto(
     Guid Id,

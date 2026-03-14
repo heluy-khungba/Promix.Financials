@@ -1,8 +1,9 @@
 ﻿using Promix.Financials.Application.Abstractions;
+using Promix.Financials.Application.Features.Accounts.Commands;
 using Promix.Financials.Domain.Aggregates.Accounts;
 using Promix.Financials.Domain.Exceptions;
 
-namespace Promix.Financials.Application.Features.Accounts;
+namespace Promix.Financials.Application.Features.Accounts.Services;
 
 public sealed class CreateAccountService
 {
