@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Promix.Financials.Application.Abstractions;
 
-namespace Promix.Financials.Application.Abstractions;
-
-public interface IUserContextBootstrapper
+/// <summary>
+/// يسمح بتهيئة ومسح IUserContext من Infrastructure بدون cast مباشر.
+/// </summary>
+public interface IUserContextBootstrappable : IUserContext
 {
-    Task InitializeAsync(CancellationToken ct = default);
+    void SetSession(AppSession session, string username);
+    void Clear();
 }

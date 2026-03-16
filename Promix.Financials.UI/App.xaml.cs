@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Promix.Financials.Application.Abstractions;
@@ -6,6 +7,7 @@ using Promix.Financials.Application.Features.Accounts.Services;
 using Promix.Financials.Infrastructure;
 using Promix.Financials.Infrastructure.Persistence;
 using Promix.Financials.Infrastructure.Persistence.Seeding;
+using Promix.Financials.Infrastructure.Security;
 using Promix.Financials.UI.Security;
 using Promix.Financials.UI.ViewModels.Accounts;
 using Promix.Financials.UI.ViewModels.Currencies;
@@ -38,8 +40,9 @@ public partial class App : Microsoft.UI.Xaml.Application
 
             try
             {
-                System.IO.File.WriteAllText(
-                    @"C:\Users\mdien\Desktop\crash_log.txt", msg);
+                var crashPath = System.IO.Path.Combine(
+    ApplicationData.Current.LocalFolder.Path, "crash_log.txt");
+                System.IO.File.WriteAllText(crashPath, msg);
             }
             catch { /* تجاهل إذا فشل الكتابة */ }
 
@@ -53,16 +56,19 @@ public partial class App : Microsoft.UI.Xaml.Application
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
             {
-                var cs = "Server=.\\MSSQLSERVER2025;Database=PromixFinancials;Trusted_Connection=True;TrustServerCertificate=True;";
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("appsettings.json", optional: false)
+                    .Build();
 
+                var cs = config.GetConnectionString("Promix")
+                    ?? throw new InvalidOperationException("Missing ConnectionStrings:Promix in appsettings.json");
                 services.AddInfrastructure(cs);
                 services.AddTransient<CompanyCurrenciesViewModel>();
                 services.AddSingleton<ISessionStore, LocalSettingsSessionStore>();
                 services.AddTransient<ChartOfAccountsViewModel>();
                 services.AddTransient<NewAccountDialogViewModel>();
-                services.AddTransient<CreateAccountService>();        // إذا لم يكن مسجلاً
-                services.AddTransient<EditAccountService>();          // 🆕
-                services.AddTransient<DeleteAccountService>();
+                
                 services.AddTransient<EditAccountDialogViewModel>();
             })
             .Build();

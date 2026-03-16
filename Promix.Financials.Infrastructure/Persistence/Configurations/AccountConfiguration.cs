@@ -17,7 +17,8 @@ public sealed class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
         builder.Property(x => x.NameAr).HasMaxLength(200).IsRequired();
         builder.Property(x => x.NameEn).HasMaxLength(200);
-
+        // أضف هذا السطر داخل Configure method:
+        builder.Property(x => x.RowVersion).IsRowVersion();
         builder.Property(x => x.Nature)
             .HasConversion<int>()
             .IsRequired();

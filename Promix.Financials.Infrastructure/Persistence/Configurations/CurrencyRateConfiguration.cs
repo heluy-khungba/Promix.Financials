@@ -34,5 +34,7 @@ public sealed class CurrencyRateConfiguration : IEntityTypeConfiguration<Currenc
 
         builder.HasIndex(x => new { x.CompanyId, x.CurrencyCode, x.RateDate })
             .IsUnique();
+        // أضف هذا السطر داخل Configure method:
+        builder.Property(x => x.RowVersion).IsRowVersion();
     }
 }

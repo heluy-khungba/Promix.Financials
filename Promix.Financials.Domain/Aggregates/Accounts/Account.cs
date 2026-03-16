@@ -3,7 +3,7 @@ using Promix.Financials.Domain.Enums;
 
 namespace Promix.Financials.Domain.Aggregates.Accounts;
 
-public sealed class Account : Entity<Guid>
+public sealed class Account : AggregateRoot<Guid>  // ✅ تغيّر من Entity<Guid>
 {
     private Account() { } // EF
 
@@ -44,10 +44,6 @@ public sealed class Account : Entity<Guid>
     public bool IsSystem { get; private set; }
     public bool IsActive { get; private set; }
 
-    // ─── Domain Method: تعديل ────────────────────────���───────────
-    /// <summary>
-    /// يُعدِّل الحقول المسموح بتعديلها — الكود والطبيعة والعملة ممنوعة.
-    /// </summary>
     public void Update(string nameAr, string? nameEn, bool isActive, string? notes)
     {
         if (string.IsNullOrWhiteSpace(nameAr))
@@ -59,7 +55,6 @@ public sealed class Account : Entity<Guid>
         Notes = string.IsNullOrWhiteSpace(notes) ? null : notes.Trim();
     }
 
-    // ─── Domain Method: ت��طيل ────────────────────────────────────
     public void Deactivate()
     {
         if (IsSystem)

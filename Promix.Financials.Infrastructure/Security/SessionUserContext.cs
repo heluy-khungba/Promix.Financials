@@ -2,7 +2,7 @@
 
 namespace Promix.Financials.Infrastructure.Security;
 
-public sealed class SessionUserContext : IUserContext
+public sealed class SessionUserContext : IUserContextBootstrappable   // ✅ كان IUserContext
 {
     public Guid UserId { get; private set; }
     public Guid? CompanyId { get; private set; }

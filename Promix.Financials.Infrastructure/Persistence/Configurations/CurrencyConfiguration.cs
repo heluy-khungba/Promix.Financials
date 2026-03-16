@@ -38,5 +38,7 @@ public sealed class CurrencyConfiguration : IEntityTypeConfiguration<DefaultCurr
 
         builder.Property(x => x.DisplayOrder)
             .IsRequired();
+        // أضف هذا السطر داخل Configure method:
+        builder.Property(x => x.RowVersion).IsRowVersion();
     }
 }

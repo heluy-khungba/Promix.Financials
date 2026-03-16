@@ -8,5 +8,6 @@ namespace Promix.Financials.Infrastructure.Persistence.Configurations
 {
     internal class RoleConfiguration
     {
+
     }
 }

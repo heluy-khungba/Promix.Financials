@@ -1,24 +1,24 @@
-﻿using Promix.Financials.Application.Abstractions;
+﻿using Promix.Financials.Application.Abstractions;   // ✅ هنا IUserContextBootstrapper + IUserContextBootstrappable
 
 namespace Promix.Financials.Infrastructure.Security;
 
-public sealed class UserContextBootstrapper : IUserContextBootstrapper
+public sealed class UserContextBootstrapper : IUserContextBootstrapper   // ✅ يعمل لأن using موجود
 {
     private readonly ISessionStore _sessionStore;
     private readonly IUserRepository _users;
     private readonly IDateTimeProvider _clock;
-    private readonly SessionUserContext _userContext;
+    private readonly IUserContextBootstrappable _userContext;   // ✅ بدلاً من SessionUserContext
 
     public UserContextBootstrapper(
         ISessionStore sessionStore,
         IUserRepository users,
         IDateTimeProvider clock,
-        IUserContext userContext)
+        IUserContextBootstrappable userContext)   // ✅ DI يحقنها تلقائياً — بدون Cast
     {
         _sessionStore = sessionStore;
         _users = users;
         _clock = clock;
-        _userContext = (SessionUserContext)userContext;
+        _userContext = userContext;
     }
 
     public async Task InitializeAsync(CancellationToken ct = default)
@@ -27,7 +27,6 @@ public sealed class UserContextBootstrapper : IUserContextBootstrapper
 
         if (session is null || session.IsExpired(_clock.UtcNow))
         {
-            // clears active user's persisted session if any + runtime
             await _sessionStore.ClearAsync(ct);
             _userContext.Clear();
             return;

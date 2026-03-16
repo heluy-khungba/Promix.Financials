@@ -30,6 +30,7 @@
     <None Remove="Views\DashboardView.xaml" />
     <None Remove="Views\LoginView.xaml" />
     <None Remove="Views\SettingsView.xaml" />
+	  
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +58,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.25">
+		
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

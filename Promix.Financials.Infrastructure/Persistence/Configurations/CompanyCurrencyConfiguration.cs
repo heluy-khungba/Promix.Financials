@@ -12,7 +12,8 @@ public sealed class CompanyCurrencyConfiguration : IEntityTypeConfiguration<Comp
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedNever();
-
+        // أضف هذا السطر داخل Configure method:
+        builder.Property(x => x.RowVersion).IsRowVersion();
         builder.Property(x => x.CompanyId).IsRequired();
 
         builder.Property(x => x.CurrencyCode)
