@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Promix.Financials.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Promix.Financials.Infrastructure.Persistence;
 namespace Promix.Financials.Infrastructure.Migrations
 {
     [DbContext(typeof(PromixDbContext))]
-    partial class PromixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260317170838_AddRowVersionColumns")]
+    partial class AddRowVersionColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,106 +237,6 @@ namespace Promix.Financials.Infrastructure.Migrations
                     b.ToTable("Accounts", (string)null);
                 });
 
-            modelBuilder.Entity("Promix.Financials.Domain.Aggregates.Journals.JournalEntry", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("CreatedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateOnly>("EntryDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("EntryNumber")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<DateTimeOffset?>("PostedAtUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("PostedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ReferenceNo")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId", "EntryDate");
-
-                    b.HasIndex("CompanyId", "EntryNumber")
-                        .IsUnique();
-
-                    b.ToTable("JournalEntries", (string)null);
-                });
-
-            modelBuilder.Entity("Promix.Financials.Domain.Aggregates.Journals.JournalLine", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Credit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Debit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<Guid>("JournalEntryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("LineNumber")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("JournalEntryId", "LineNumber")
-                        .IsUnique();
-
-                    b.ToTable("JournalLines", (string)null);
-                });
-
             modelBuilder.Entity("Promix.Financials.Domain.Security.Company", b =>
                 {
                     b.Property<Guid>("Id")
@@ -459,30 +362,6 @@ namespace Promix.Financials.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Promix.Financials.Domain.Aggregates.Journals.JournalLine", b =>
-                {
-                    b.HasOne("Promix.Financials.Domain.Aggregates.Accounts.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Promix.Financials.Domain.Aggregates.Journals.JournalEntry", "JournalEntry")
-                        .WithMany("Lines")
-                        .HasForeignKey("JournalEntryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("JournalEntry");
-                });
-
-            modelBuilder.Entity("Promix.Financials.Domain.Aggregates.Journals.JournalEntry", b =>
-                {
-                    b.Navigation("Lines");
                 });
 #pragma warning restore 612, 618
         }

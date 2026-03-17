@@ -12,11 +12,13 @@ public sealed class CompanyConfiguration : IEntityTypeConfiguration<Company>
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedNever();
-        // أضف هذا السطر داخل Configure method:
         builder.Property(x => x.RowVersion).IsRowVersion();
         builder.Property(x => x.Code)
             .HasMaxLength(50)
             .IsRequired();
+        
+        // placeholder to force explicit migration generation for RowVersion
+
 
         builder.Property(x => x.Name)
             .HasMaxLength(200)

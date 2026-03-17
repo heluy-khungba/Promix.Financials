@@ -21,6 +21,9 @@
               Content="الحسابات"
                 Click="ChartOfAccounts_Click"
                    Style="{StaticResource SidebarNavButtonStyle}"/>
+            <Button Content="القيود والسندات"
+                    Click="Journals_Click"
+                    Style="{StaticResource SidebarNavButtonStyle}"/>
             <Button x:Name="BtnItems" x:Uid="Sidebar_Items" Click="Items_Click" Style="{StaticResource SidebarNavButtonStyle}"/>
             <Button x:Name="BtnReports" x:Uid="Sidebar_Reports" Click="Reports_Click" Style="{StaticResource SidebarNavButtonStyle}"/>
             <Button x:Name="BtnSettings" x:Uid="Sidebar_Settings" Click="Settings_Click" Style="{StaticResource SidebarNavButtonStyle}"/>

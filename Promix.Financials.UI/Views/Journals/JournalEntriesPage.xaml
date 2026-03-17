@@ -1,0 +1,327 @@
+<Page
+    x:Class="Promix.Financials.UI.Views.Journals.JournalEntriesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{StaticResource AppBackgroundBrush}"
+    FlowDirection="RightToLeft">
+
+    <Grid Margin="24,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,18">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" CornerRadius="28" Padding="24" MinHeight="190">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#0F172A" Offset="0"/>
+                        <GradientStop Color="#1D4ED8" Offset="0.55"/>
+                        <GradientStop Color="#38BDF8" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="260"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Spacing="10">
+                        <Border Width="56" Height="56" CornerRadius="18" Background="#172554">
+                            <FontIcon Glyph="&#xE8A5;" FontSize="26" Foreground="White"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="دفتر اليومية والسندات"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
+                        <TextBlock Text="وحدة عملية لمكاتب الخدمات والمشاريع: قيود يومية، سندات قبض وصرف، وترحيل فوري مع عرض بصري واضح للحركة."
+                                   MaxWidth="620"
+                                   TextWrapping="WrapWholeWords"
+                                   Foreground="#DBEAFE"
+                                   FontSize="13"/>
+                        <TextBlock Text="{Binding LastRefreshedText}"
+                                   Foreground="#BFDBFE"
+                                   FontSize="12"/>
+                    </StackPanel>
+
+                    <Border Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            Background="#0B1220"
+                            CornerRadius="24"
+                            Padding="18"
+                            Width="240">
+                        <Grid RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="اتجاه الحركة" Foreground="White" FontWeight="SemiBold"/>
+                                <TextBlock Text="آخر 7 أيام" Foreground="#93C5FD"/>
+                            </StackPanel>
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding ActivityBars}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="10"
+                                                    VerticalAlignment="Bottom"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Bottom" Spacing="4">
+                                            <TextBlock Text="{Binding ValueText}" Foreground="#BFDBFE" FontSize="11" HorizontalAlignment="Center"/>
+                                            <Border Width="18"
+                                                    Height="{Binding BarHeight}"
+                                                    Background="{Binding FillBrush}"
+                                                    CornerRadius="9"
+                                                    VerticalAlignment="Bottom"/>
+                                            <TextBlock Text="{Binding Label}" Foreground="White" FontSize="11" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <StackPanel Grid.Column="1"
+                        Margin="16,0,0,0"
+                        Spacing="10"
+                        VerticalAlignment="Top">
+                <Button Content="↻ تحديث"
+                        Style="{StaticResource SecondaryActionButtonStyle}"
+                        Click="Refresh_Click"/>
+                <Button Content="+ سند جديد"
+                        Style="{StaticResource PrimaryActionButtonStyle}"
+                        Click="NewEntry_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,0,0,18" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="18" Padding="18">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="إجمالي السندات" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBlock Text="{Binding TotalEntriesText}" FontSize="28" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="18" Padding="18">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="المرحل" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBlock Text="{Binding PostedEntriesText}" FontSize="28" FontWeight="Bold" Foreground="#0369A1"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="18" Padding="18">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="المسودات" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBlock Text="{Binding DraftEntriesText}" FontSize="28" FontWeight="Bold" Foreground="#B45309"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="3" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="18" Padding="18">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="حجم الحركة" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBlock Text="{Binding MovementVolumeText}" FontSize="28" FontWeight="Bold" Foreground="#16A34A"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Spacing="8" Margin="0,0,0,12">
+            <Border x:Name="ErrorBanner"
+                    Background="#FEF2F2"
+                    BorderBrush="#FECACA"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="14,10"
+                    Visibility="Collapsed">
+                <TextBlock x:Name="ErrorBannerText" Foreground="#DC2626"/>
+            </Border>
+            <Border x:Name="SuccessBanner"
+                    Background="#ECFDF5"
+                    BorderBrush="#BBF7D0"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="14,10"
+                    Visibility="Collapsed">
+                <TextBlock x:Name="SuccessBannerText" Foreground="#166534"/>
+            </Border>
+        </StackPanel>
+
+        <Border Grid.Row="3"
+                Background="#FFFFFF"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1"
+                CornerRadius="22"
+                Padding="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Background="#F8FAFC"
+                        CornerRadius="22,22,0,0"
+                        Padding="18,14"
+                        BorderBrush="#E2E8F0"
+                        BorderThickness="0,0,0,1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="90"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="الرقم" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SlateTextBrush}"/>
+                        <TextBlock Grid.Column="1" Text="التاريخ" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SlateTextBrush}"/>
+                        <TextBlock Grid.Column="2" Text="البيان" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SlateTextBrush}"/>
+                        <TextBlock Grid.Column="3" Text="النوع" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SlateTextBrush}"/>
+                        <TextBlock Grid.Column="4" Text="المدين" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SlateTextBrush}"/>
+                        <TextBlock Grid.Column="5" Text="الدائن" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SlateTextBrush}"/>
+                        <TextBlock Grid.Column="6" Text="الحالة" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource SlateTextBrush}"/>
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="1">
+                    <ListView x:Name="EntriesListView"
+                              ItemsSource="{Binding Entries}"
+                              SelectedItem="{Binding SelectedEntry, Mode=TwoWay}"
+                              SelectionMode="Single"
+                              Background="Transparent"
+                              BorderThickness="0">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Padding" Value="18,12"/>
+                                <Setter Property="BorderBrush" Value="#F1F5F9"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <TextBlock Text="{Binding EntryNumber}" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                                        <TextBlock Text="{Binding ReferenceNo}" FontSize="11" Foreground="{StaticResource MutedTextBrush}"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Text="{Binding EntryDateText}" VerticalAlignment="Center" FontSize="13"/>
+
+                                    <StackPanel Grid.Column="2" Spacing="4">
+                                        <TextBlock Text="{Binding Description}" TextWrapping="WrapWholeWords" FontSize="13"/>
+                                        <TextBlock Text="{Binding LineCountText}" Foreground="{StaticResource MutedTextBrush}" FontSize="11"/>
+                                    </StackPanel>
+
+                                    <Border Grid.Column="3"
+                                            Background="{Binding TypeBackgroundBrush}"
+                                            CornerRadius="14"
+                                            Padding="10,6"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <FontIcon Glyph="{Binding TypeGlyph}" Foreground="{Binding TypeForegroundBrush}" FontSize="12"/>
+                                            <TextBlock Text="{Binding TypeText}" Foreground="{Binding TypeForegroundBrush}" FontSize="11" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="4"
+                                               Text="{Binding TotalDebitText}"
+                                               VerticalAlignment="Center"
+                                               Foreground="#1D4ED8"
+                                               FontWeight="SemiBold"/>
+
+                                    <TextBlock Grid.Column="5"
+                                               Text="{Binding TotalCreditText}"
+                                               VerticalAlignment="Center"
+                                               Foreground="#16A34A"
+                                               FontWeight="SemiBold"/>
+
+                                    <Border Grid.Column="6"
+                                            Background="{Binding StatusBackgroundBrush}"
+                                            CornerRadius="14"
+                                            Padding="10,6"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding StatusText}"
+                                                   Foreground="{Binding StatusForegroundBrush}"
+                                                   FontSize="11"
+                                                   FontWeight="SemiBold"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Border x:Name="EmptyState"
+                            Background="Transparent"
+                            Visibility="Collapsed">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+                            <Border Width="84" Height="84" CornerRadius="42" Background="#DBEAFE">
+                                <FontIcon Glyph="&#xE8A5;" FontSize="34" Foreground="#2563EB"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="لا توجد سندات بعد" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="ابدأ بسند قبض أو صرف أو قيد يومية، وستظهر الحركة هنا مباشرة."
+                                       Foreground="{StaticResource MutedTextBrush}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="4"
+                Background="White"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1"
+                CornerRadius="18"
+                Padding="16,12"
+                Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding SelectedSummaryText}"
+                           Foreground="{StaticResource SlateTextBrush}"
+                           VerticalAlignment="Center"/>
+
+                <Button Grid.Column="1"
+                        Content="ترحيل المحدد"
+                        IsEnabled="{Binding CanPostSelected}"
+                        Style="{StaticResource PrimaryActionButtonStyle}"
+                        Click="PostSelected_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

@@ -8,6 +8,8 @@ using Promix.Financials.Application.Features.Auth;
 using Promix.Financials.Application.Features.Companies;
 using Promix.Financials.Application.Features.Currencies.Queries;
 using Promix.Financials.Application.Features.Currencies.Services;
+using Promix.Financials.Application.Features.Journals.Queries;
+using Promix.Financials.Application.Features.Journals.Services;
 using Promix.Financials.Infrastructure.Persistence;
 using Promix.Financials.Infrastructure.Persistence.Queries;
 using Promix.Financials.Infrastructure.Persistence.Repositories;
@@ -29,6 +31,7 @@ public static class DependencyInjection
 
         // Repositories
         services.AddScoped<IAccountRepository, EfAccountRepository>();
+        services.AddScoped<IJournalEntryRepository, EfJournalEntryRepository>();
         services.AddScoped<ICompanyAdminRepository, EfCompanyAdminRepository>();
         services.AddScoped<ICompanyCurrencyRepository, EfCompanyCurrencyRepository>();
         services.AddScoped<ICurrencyRepository, EfCurrencyRepository>();
@@ -37,11 +40,14 @@ public static class DependencyInjection
 
         // Queries
         services.AddScoped<IChartOfAccountsQuery, ChartOfAccountsQuery>();
+        services.AddScoped<IJournalEntriesQuery, JournalEntriesQuery>();
 
         // Services — Application
         services.AddScoped<CreateAccountService>();
         services.AddScoped<EditAccountService>();
         services.AddScoped<DeleteAccountService>();
+        services.AddScoped<CreateJournalEntryService>();
+        services.AddScoped<PostJournalEntryService>();
         services.AddScoped<CreateCompanyService>();
         services.AddScoped<ICompanySelectionService, CompanySelectionService>();
         services.AddScoped<ICompanyInitializer,

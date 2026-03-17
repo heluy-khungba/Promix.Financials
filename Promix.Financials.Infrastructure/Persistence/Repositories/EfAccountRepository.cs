@@ -34,12 +34,19 @@ public sealed class EfAccountRepository : IAccountRepository
     public Task<Account?> GetByIdAsync(Guid id, Guid companyId)
         => _db.Accounts.FirstOrDefaultAsync(a => a.Id == id && a.CompanyId == companyId);
 
+    public async Task<IReadOnlyList<Account>> GetPostingAccountsAsync(Guid companyId)
+        => await _db.Accounts
+            .AsNoTracking()
+            .Where(a => a.CompanyId == companyId && a.IsPosting && a.IsActive)
+            .OrderBy(a => a.Code)
+            .ToListAsync();
+
     public Task<bool> HasChildrenAsync(Guid accountId, Guid companyId)
         => _db.Accounts.AnyAsync(a => a.ParentId == accountId && a.CompanyId == companyId);
 
     public Task<bool> HasMovementsAsync(Guid accountId, Guid companyId)
-        // ✅ JournalLines لم تُبنَ بعد — false مؤقتاً حتى نبني Journal Entries
-        => Task.FromResult(false);
+        => _db.JournalLines
+            .AnyAsync(x => x.AccountId == accountId && x.JournalEntry.CompanyId == companyId);
 
     public void Remove(Account account)
         => _db.Accounts.Remove(account);

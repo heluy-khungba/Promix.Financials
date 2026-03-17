@@ -11,6 +11,7 @@ using Promix.Financials.Infrastructure.Security;
 using Promix.Financials.UI.Security;
 using Promix.Financials.UI.ViewModels.Accounts;
 using Promix.Financials.UI.ViewModels.Currencies;
+using Promix.Financials.UI.ViewModels.Journals;
 using System;
 using Windows.Globalization;
 using Windows.Storage;
@@ -65,6 +66,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     ?? throw new InvalidOperationException("Missing ConnectionStrings:Promix in appsettings.json");
                 services.AddInfrastructure(cs);
                 services.AddTransient<CompanyCurrenciesViewModel>();
+                services.AddTransient<JournalEntriesViewModel>();
                 services.AddSingleton<ISessionStore, LocalSettingsSessionStore>();
                 services.AddTransient<ChartOfAccountsViewModel>();
                 services.AddTransient<NewAccountDialogViewModel>();

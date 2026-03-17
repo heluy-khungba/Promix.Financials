@@ -24,10 +24,12 @@
     <None Remove="Dialogs\Companies\NewCompanyDialog.xaml" />
     <None Remove="Dialogs\Currencies\CompanyCurrenciesView.xaml" />
     <None Remove="Dialogs\Currencies\CompanyCurrencyDialog.xaml" />
+    <None Remove="Dialogs\Journals\JournalEntryDialog.xaml" />
     <None Remove="Styles\Buttons.xaml" />
     <None Remove="Views\Accounts\ChartOfAccountsView.xaml" />
     <None Remove="Views\CompanySelectionView.xaml" />
     <None Remove="Views\DashboardView.xaml" />
+    <None Remove="Views\Journals\JournalEntriesPage.xaml" />
     <None Remove="Views\LoginView.xaml" />
     <None Remove="Views\SettingsView.xaml" />
 	  
@@ -41,6 +43,10 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -191,6 +197,16 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="Dialogs\Accounts\EditAccountDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Dialogs\Journals\JournalEntryDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Views\Journals\JournalEntriesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
 	</ItemGroup>

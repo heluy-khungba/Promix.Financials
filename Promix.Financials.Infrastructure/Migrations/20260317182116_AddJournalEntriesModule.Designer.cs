@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Promix.Financials.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Promix.Financials.Infrastructure.Persistence;
 namespace Promix.Financials.Infrastructure.Migrations
 {
     [DbContext(typeof(PromixDbContext))]
-    partial class PromixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260317182116_AddJournalEntriesModule")]
+    partial class AddJournalEntriesModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,6 +7,7 @@ using Promix.Financials.UI.Controls;
 using Promix.Financials.UI.Views;
 using System;
 using Promix.Financials.UI.Views.Accounts;
+using Promix.Financials.UI.Views.Journals;
 namespace Promix.Financials.UI;
 
 public sealed partial class MainWindow : Window
@@ -74,6 +75,10 @@ public sealed partial class MainWindow : Window
 
             case SidebarDestination.ChartOfAccounts:
                 RootFrame.Navigate(typeof(Promix.Financials.UI.Views.Accounts.ChartOfAccountsView));
+                break;
+
+            case SidebarDestination.Journals:
+                RootFrame.Navigate(typeof(JournalEntriesPage));
                 break;
 
             case SidebarDestination.Items:

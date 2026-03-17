@@ -13,6 +13,7 @@ public interface IAccountRepository
 
     // ─── جديدة 🆕 ────────────────────────────��───────────────────
     Task<Account?> GetByIdAsync(Guid id, Guid companyId);
+    Task<IReadOnlyList<Account>> GetPostingAccountsAsync(Guid companyId);
     Task<bool> HasChildrenAsync(Guid accountId, Guid companyId);
     Task<bool> HasMovementsAsync(Guid accountId, Guid companyId);
     void Remove(Account account);

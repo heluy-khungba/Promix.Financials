@@ -1,13 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Promix.Financials.Domain.Security;
 
-namespace Promix.Financials.Infrastructure.Persistence.Configurations
+namespace Promix.Financials.Infrastructure.Persistence.Configurations;
+
+public sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
-    internal class RoleConfiguration
+    public void Configure(EntityTypeBuilder<Role> builder)
     {
+        builder.ToTable("Roles");
 
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.RowVersion).IsRowVersion();
+
+        builder.Property(x => x.Name)
+            .IsRequired();
+
+        builder.Property(x => x.IsSystem)
+            .IsRequired();
     }
 }

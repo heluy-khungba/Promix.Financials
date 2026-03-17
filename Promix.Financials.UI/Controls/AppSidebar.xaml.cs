@@ -26,6 +26,9 @@ public sealed partial class AppSidebar : UserControl
     private void ChartOfAccounts_Click(object sender, RoutedEventArgs e)
         => NavigateRequested?.Invoke(this, new SidebarNavigateEventArgs(SidebarDestination.ChartOfAccounts));
 
+    private void Journals_Click(object sender, RoutedEventArgs e)
+        => NavigateRequested?.Invoke(this, new SidebarNavigateEventArgs(SidebarDestination.Journals));
+
     private void Currencies_Click(object sender, RoutedEventArgs e)
         => NavigateRequested?.Invoke(this, new SidebarNavigateEventArgs(SidebarDestination.Currencies));
 
@@ -46,6 +49,7 @@ public enum SidebarDestination
 {
     Dashboard,
     ChartOfAccounts,
+    Journals,
     Currencies,   // 🆕
     Items,
     Reports,
